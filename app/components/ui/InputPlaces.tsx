@@ -65,7 +65,7 @@ const InputPlaces: FC<IInputPlaces> = ({ cbSuccess, type }) => {
               {...getInputProps({
                 ref: inputRef,
                 placeholder: isFrom ? "Where from?" : "Where to?",
-                className: "outline-none w-full text-gray-800",
+                className: "outline-none w-[70asdf%] text-gray-800",
               })}
             />
             {!isFrom && (
