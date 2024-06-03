@@ -5,9 +5,6 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-places-autocomplete";
 import cn from "classnames";
-import { current } from "@reduxjs/toolkit";
-import { DiVim } from "react-icons/di";
-import classNames from "classnames";
 import { Coords } from "google-map-react";
 import { useTypedSelector } from "@/app/hooks/useTypedSelecor";
 
@@ -45,7 +42,7 @@ const InputPlaces: FC<IInputPlaces> = ({ cbSuccess, type }) => {
       onError={(err) => console.log("error " + err)}>
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div
-          className={cn("shadow-lg", {
+          className={cn(" xl:h-max md:h-max shadow-lg", {
             "mb-5": isFrom,
           })}>
           <div
@@ -65,7 +62,7 @@ const InputPlaces: FC<IInputPlaces> = ({ cbSuccess, type }) => {
               {...getInputProps({
                 ref: inputRef,
                 placeholder: isFrom ? "Where from?" : "Where to?",
-                className: "outline-none w-[70asdf%] text-gray-800",
+                className: "outline-none w-[70%] text-gray-800",
               })}
             />
             {!isFrom && (

@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
+import GoogleMapReact from "google-map-react";
 import { useActions } from "@/app/hooks/useActions";
 import { useTypedSelector } from "@/app/hooks/useTypedSelecor";
-import GoogleMapReact from "google-map-react";
-import { useEffect, useState } from "react";
 import { optionsList } from "./data";
 
 interface IMAP {
@@ -10,7 +10,8 @@ interface IMAP {
 }
 
 const Map = () => {
-  const [MAP, setMap] = useState<IMAP>({} as IMAP);
+  const [MAP, setMap] = useState<IMAP | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [directionsRenderer, setDirectionsRenderer] =
     useState<google.maps.DirectionsRenderer | null>(null);
 
@@ -18,16 +19,13 @@ const Map = () => {
   const { from, to } = useTypedSelector((state) => state.taxi);
 
   const renderRoute = () => {
-    const { map, maps } = MAP;
-
-    if (!directionsRenderer) {
-      const newDirectionsRenderer = new maps.DirectionsRenderer();
-      setDirectionsRenderer(newDirectionsRenderer);
-      newDirectionsRenderer.setMap(map);
+    if (!isMapLoaded || !MAP || !from.location || !to.location) {
+      return;
     }
 
-    const directionsService: google.maps.DirectionsService =
-      new maps.DirectionsService();
+    const { map, maps } = MAP;
+
+    const directionsService = new maps.DirectionsService();
 
     directionsService
       .route({
@@ -35,30 +33,37 @@ const Map = () => {
         destination: to.location,
         travelMode: google.maps.TravelMode.DRIVING,
       })
-      .then((res) => {
+      .then((res: any) => {
+        // Clear previous route
         if (directionsRenderer) {
-          directionsRenderer.setDirections(res);
-          const durationSec = res.routes[0].legs[0].duration?.value;
-          if (durationSec) {
-            setTravelTime(Math.ceil(durationSec / 60));
-            setSelectedOption(optionsList[0]._id);
-          }
+          directionsRenderer.setMap(null);
         }
-      })
-      .catch((err) => alert(err));
 
-    directionsRenderer?.setOptions({
-      markerOptions: {
-        clickable: false,
-      },
-    });
+        // Create new directionsRenderer
+        const newDirectionsRenderer = new maps.DirectionsRenderer({ map });
+        newDirectionsRenderer.setDirections(res);
+
+        const durationSec = res.routes[0].legs[0].duration?.value;
+        if (durationSec) {
+          setTravelTime(Math.ceil(durationSec / 60));
+          setSelectedOption(optionsList[0]._id);
+        }
+
+        setDirectionsRenderer(newDirectionsRenderer);
+      })
+      .catch((err: any) => alert("not possible"));
   };
 
   useEffect(() => {
-    if (from.location?.lat && to.location?.lat && MAP?.map && MAP?.maps) {
+    if (isMapLoaded && MAP && from.location && to.location) {
       renderRoute();
     }
-  }, [from, to, MAP]);
+  }, [isMapLoaded, MAP, from, to]);
+
+  const handleMapLoaded = ({ map, maps }: { map: any; maps: any }) => {
+    setMap({ map, maps });
+    setIsMapLoaded(true);
+  };
 
   return (
     <div className="h-screen w-screen">
@@ -81,7 +86,7 @@ const Map = () => {
             : undefined
         }
         yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({ map, maps }) => setMap({ map, maps })}
+        onGoogleApiLoaded={handleMapLoaded}
       />
     </div>
   );
