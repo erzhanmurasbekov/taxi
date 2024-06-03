@@ -3,8 +3,10 @@ import Head from "next/head";
 import Script from "next/script";
 import FavIcon from "../../assets/images/loader-screen.jpg";
 import Loader from "../ui/Loader";
+
 interface ILayout {
   title: string;
+  children: ReactNode;
 }
 const Layout: FC<ILayout> = ({ children, title }) => {
   const [isLoading, setIsLoading] = useState(false);

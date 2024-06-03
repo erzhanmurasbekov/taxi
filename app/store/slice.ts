@@ -5,7 +5,7 @@ const initialState: TypeInitialState = {
   from: {} as TypeFrom,
   to: {} as TypeFrom,
   travelTime: 0,
-  selectedOption: "",
+  selectedOption: "Economy-439",
 };
 
 export const taxiSlice = createSlice({
