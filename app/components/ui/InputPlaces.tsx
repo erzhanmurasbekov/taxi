@@ -68,7 +68,10 @@ const InputPlaces: FC<IInputPlaces> = ({ cbSuccess, type }) => {
             {!isFrom && (
               <div className="absolute right-5 text-sm text-gray-400">
                 {travelTime
-                  ? `${travelTime} min. (${Math.ceil(travelTime / 60)} h.)`
+                  ? /* `${travelTime} min. (${Math.ceil(travelTime / 60)} h.)` */
+                    travelTime < 60
+                    ? `${travelTime} min`
+                    : `${Math.floor(travelTime / 60)}h ${travelTime % 60}min`
                   : `- min`}{" "}
               </div>
             )}

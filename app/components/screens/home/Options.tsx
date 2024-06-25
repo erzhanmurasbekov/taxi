@@ -34,8 +34,8 @@ const Options = () => {
                   ? new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
-                    }).format(travelTime * option.multiplier)
-                  : "- $"}
+                    }).format(travelTime * option.multiplier) + " $"
+                  : ""}
               </div>
             </div>
           </button>
