@@ -42,11 +42,14 @@ const InputPlaces: FC<IInputPlaces> = ({ cbSuccess, type }) => {
       onError={(err) => console.log("error " + err)}>
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div
-          className={cn(" xl:h-max md:h-max shadow-lg", {
-            "mb-5": isFrom,
-          })}>
+          className={cn(
+            " relative -bottom-12 xl:bottom-0 xl:h-max md:h-max shadow-lg",
+            {
+              "mb-1 xl:mb-5": isFrom,
+            }
+          )}>
           <div
-            className="py-4 px-5 bg-white rounded-lg flex items-center"
+            className="xl:py-4 py-1 px-5 bg-white rounded-lg flex items-center"
             style={
               suggestions.length
                 ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }
